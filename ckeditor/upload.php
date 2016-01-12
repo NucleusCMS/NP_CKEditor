@@ -51,7 +51,7 @@ if (!$member->isAdmin() and $CONF['AllowUpload'] != true) {
   * accepts a file for upload
   */
 function media_upload() {
-	global $DIR_MEDIA, $member, $CONF, $funcNum;
+	global $DIR_MEDIA, $member, $CONF, $funcNum, $responseType;
 		
 	$uploadInfo = postFileInfo('upload');
 	
@@ -116,6 +116,7 @@ function media_upload() {
 	if ($res != '')
 		upload_doError($res);
 
+	$url = $CONF['MediaURL'] . $collection . '/' . $filename;
 	if ($responseType != 'json') {
 		echo "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction(" . $funcNum . ", '" . $url . "', '');</script>";
 	} else {
