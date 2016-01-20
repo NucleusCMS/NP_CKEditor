@@ -20,8 +20,6 @@ require_once('../../../config.php');
 //include($DIR_LIBS . 'MEDIA.php');	// media classes
 include_libs('MEDIA.php',false,false);
 
-// sendContentType('application/xhtml+xml', 'media');
-
 // user needs to be logged in to use this
 if (!$member->isLoggedIn()) {
 	upload_doError(_LOGIN_PLEASE);
@@ -98,10 +96,10 @@ function media_upload() {
 	if (!is_uploaded_file($filetempname))
 		upload_doError(_ERROR_BADREQUEST);
 	
-	// prefix filename with current date (YYYY-MM-DD-)
+	// prefix filename with current date (YYYYMMDD-HHMMSS-)
 	// this to avoid nameclashes
 	if ($CONF['MediaPrefix'])
-		$filename = strftime("%Y%m%d-", time()) . $filename;
+		$filename = strftime("%Y%m%d-%H%M%S-", time()) . $filename;
 
 	// currently selected collection
 	$collection = requestVar('collection');

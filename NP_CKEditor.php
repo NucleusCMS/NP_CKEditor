@@ -3,10 +3,10 @@ define('BR', PHP_EOL);
 class NP_CKEditor extends NucleusPlugin {
 	function getName()           { return 'CKEditor'; }
 	function getAuthor()         { return 'yamamoto, osamuh'; }
-	function getURL()            { return 'http://nucleuscms.github.io/NP_CKEditor/'; }
+	function getURL()            { return 'http://kyms.ne.jp/'; }
 	function getVersion()        { return '4.0'; }
 	function supportsFeature($w) { return ($w == 'SqlTablePrefix') ? 1 : 0; }
-	function getDescription()    { return 'CKEditor for Nucleus CMS'; }
+	function getDescription()    { return 'Enable CKEditor to edit blog items'; }
 	function getEventList()      { return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead'); }
 
 	function install()
@@ -83,7 +83,6 @@ class NP_CKEditor extends NucleusPlugin {
 			$str .= "CKEDITOR.config.language = '$lang';" . BR;
 			$str .= "CKEDITOR.config.filebrowserBrowseUrl ='{$adminurl}media.php';" . BR;
 			$str .= "CKEDITOR.config.filebrowserUploadUrl ='{$adminurl}upload.php';" . BR;
-			$str .= "CKEDITOR.config.extraPlugins ='uploadimage';" . BR;
 			$str .= "CKEDITOR.config.uploadUrl ='{$adminurl}upload.php?responseType=json';" . BR;
 			$str .= "CKEDITOR.replace('body', {skin: 'flat,{$adminurl}ckeditor/skins/flat/'});" . BR;
 			$str .= "CKEDITOR.replace('more', {skin: 'flat,{$adminurl}ckeditor/skins/flat/'});" . BR;
