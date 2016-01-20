@@ -3,10 +3,10 @@ define('BR', PHP_EOL);
 class NP_CKEditor extends NucleusPlugin {
 	function getName()           { return 'CKEditor'; }
 	function getAuthor()         { return 'yamamoto, osamuh'; }
-	function getURL()            { return 'http://kyms.ne.jp/'; }
+	function getURL()            { return 'ttp://nucleuscms.github.io/NP_CKEditor'; }
 	function getVersion()        { return '4.0'; }
 	function supportsFeature($w) { return ($w == 'SqlTablePrefix') ? 1 : 0; }
-	function getDescription()    { return 'Enable CKEditor to edit blog items'; }
+	function getDescription()    { return 'CKEditor for Nucleus CMS'; }
 	function getEventList()      { return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead'); }
 
 	function install()
