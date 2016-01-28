@@ -1,6 +1,9 @@
 <?php
-define('BR', PHP_EOL);
+if(!defined('BR')) define('BR', "\n");
 class NP_CKEditor extends NucleusPlugin {
+	
+	var $isActive = false;
+	
 	function getName()           { return 'CKEditor'; }
 	function getAuthor()         { return 'yamamoto, osamuh'; }
 	function getURL()            { return 'http://nucleuscms.github.io/NP_CKEditor'; }
@@ -12,51 +15,35 @@ class NP_CKEditor extends NucleusPlugin {
 	function install()
 	{
 		// disable the default javascript edit bar that comes with nucleus
-		sql_query
-		(
-			"UPDATE "
-			. sql_table('config')
-			. " SET   value = '1'"
-			. " WHERE name  = 'DisableJSTools'"
-		);
+		sql_query(sprintf("UPDATE %s SET value='1' WHERE name='DisableJSTools'", sql_table('config')));
 	}
 
 	function unInstall()
 	{
 		// restore to standard settings
-		sql_query
-		(
-			"UPDATE "
-			. sql_table('config')
-			. " SET   value = '2'"
-			. " WHERE name  = 'DisableJSTools'"
-		);
+		sql_query(sprintf("UPDATE %s SET value='2' WHERE name='DisableJSTools'", sql_table('config')));
 	}
 
 	function event_AdminPrePageHead(&$data)
 	{
 		global $action;
-		$adminurl = $this->getAdminURL();
 		$action = $data['action'];
 		if (($action != 'createitem') && ($action != 'itemedit'))
 		{
 			return;
 		}
-		$CKEditor_version = $this->getOption('CKEditor_version');
 		$this->_suspendConvertBreaks();
-		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $adminurl . 'ckeditor/ckeditor.js"></script>' . BR;
-
-}
-
-	function event_BookmarkletExtraHead($data)
-	{
-		$adminurl = $this->getAdminURL();
-		$CKEditor_version = $this->getOption('CKEditor_version');
-		$this->_suspendConvertBreaks();
-		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $adminurl . 'ckeditor/ckeditor.js"></script>' . BR;
+		$ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getOption('CKEditor_version');
+		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . BR;
 	}
 
-	var $isActive = false;
+	function event_BookmarkletExtraHead(&$data)
+	{
+		$this->_suspendConvertBreaks();
+		$ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getOption('CKEditor_version');
+		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . BR;
+	}
+
 	function event_PreSendContentType($data)
 	{
 		if (substr($data['pageType'], 0, 6) == 'admin-')
@@ -132,5 +119,3 @@ class NP_CKEditor extends NucleusPlugin {
 		}
 	}
 }
-
-?>
