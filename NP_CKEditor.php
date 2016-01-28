@@ -56,54 +56,18 @@ class NP_CKEditor extends NucleusPlugin {
 	function event_AdminPrePageFoot($data)
 	{
 		global $DIR_MEDIA, $CONF;
-		$adminurl = $this->getAdminURL();
-		$pluginDirectory = $this->getDirectory();
-		$lang = (getLanguageName()=='japanese-utf8') ? 'ja':'en';
+		
 		if ($this->isActive)
 		{
 			$action = $data['action'];
 			$str = ob_get_contents();
 			ob_end_clean();
-			$str .= '<script type="text/javascript">' . BR;
-			$str .= '//<![CDATA[' . BR;
-			$str .= "CKEDITOR.config.customConfig ='{$adminurl}ckeditor/config.js';" . BR;
-			$str .= "CKEDITOR.config.language = '$lang';" . BR;
-			$str .= "CKEDITOR.config.filebrowserBrowseUrl ='{$adminurl}media.php';" . BR;
-			$str .= "CKEDITOR.config.filebrowserUploadUrl ='{$adminurl}upload.php';" . BR;
-			$str .= "CKEDITOR.config.uploadUrl ='{$adminurl}upload.php?responseType=json';" . BR;
-			$str .= "CKEDITOR.replace('body', {skin: 'flat,{$adminurl}ckeditor/skins/flat/'});" . BR;
-			$str .= "CKEDITOR.replace('more', {skin: 'flat,{$adminurl}ckeditor/skins/flat/'});" . BR;
-			$str .= BR;
-			$str .= 'function getQuery()' . BR;
-			$str .= '{' . BR;
-			$str .= '	if(location.search.length > 1)' . BR;
-			$str .= '	{' . BR;
-			$str .= '		var get = new Object();' . BR;
-			$str .= '		var ret = location.search.substr(1).split("&");' . BR;
-			$str .= '		for(var i = 0; i < ret.length; i++)' . BR;
-			$str .= '		{' . BR;
-			$str .= '			var r = ret[i].split("=");' . BR;
-			$str .= '			get[r[0]] = r[1];' . BR;
-			$str .= '		}' . BR;
-			$str .= '		return get;' . BR;
-			$str .= '	}' . BR;
-			$str .= '	else' . BR;
-			$str .= '	{' . BR;
-			$str .= '		return false;' . BR;
-			$str .= '	}' . BR;
-			$str .= '}' . BR;
-			$str .= BR;
-			$str .= 'var queryParam = getQuery();' . BR;
-			$str .= 'var CKEditorFuncNum = queryParam["CKEditorFuncNum"];' . BR;
-			$str .= BR;
-			$str .= 'function includeImage(collection, filename, type, width, height,CKEditorFuncNum) {' . BR;
-			$str .= 'var fullName;' . BR;
-			$str .= "	fullName = '" . $CONF['MediaURL'] . "' + collection + '/' + filename;" . BR;
-			$str .= 'CKEDITOR.tools.callFunction(CKEditorFuncNum, fullName);'. BR;
-			$str .= 'window.close();' . BR;
-			$str .= '}' . BR;
-			$str .= '//]]>' . BR;
-			$str .= '</script>' . BR;
+			$adminurl = $this->getAdminURL();
+			$tpl = file_get_contents($adminurl.'inlinejs.tpl');
+			$ph['adminurl'] = $adminurl;
+			$ph['lang']     = getLanguageName()==='japanese-utf8' ? 'ja':'en';
+			$ph['MediaURL'] = $CONF['MediaURL'];
+			$str .= $this->parseText($tpl,$ph);
 			echo $str;
 		}
 	}
