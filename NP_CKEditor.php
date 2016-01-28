@@ -118,4 +118,12 @@ class NP_CKEditor extends NucleusPlugin {
 			$b->writeSettings();
 		}
 	}
+
+	function parseText($tpl='string',$ph=array()) {
+		foreach($ph as $k=>$v) {
+			$k = "<%{$k}%>";
+			$tpl = str_replace($k, $v, $tpl);
+		}
+		return $tpl;
+	}
 }
