@@ -55,6 +55,12 @@ class NP_CKEditor extends NucleusPlugin {
 	{
 		global $DIR_MEDIA, $CONF;
 		
+		$action = $data['action'];
+		if ($action != 'createitem' && $action != 'itemedit')
+		{
+			return;
+		}
+		
 		if (!$this->isActive) return;
 		
 		$str = ob_get_contents();
