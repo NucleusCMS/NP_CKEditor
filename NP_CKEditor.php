@@ -31,8 +31,8 @@ class NP_CKEditor extends NucleusPlugin {
             return;
         }
         $this->_suspendConvertBreaks();
-        $ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getVersion();
-        $data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . "\n";
+        $vs = array($this->getAdminURL().'ckeditor', $this->getVersion());
+        $data['extrahead'].= vsprintf('<script language="javascript" type="text/javascript" src="%s/ckeditor.js?v=%s"></script>',$vs) . "\n";
     }
 
     function event_BookmarkletExtraHead(&$data)
