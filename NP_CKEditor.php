@@ -6,7 +6,7 @@ class NP_CKEditor extends NucleusPlugin {
 	function getName()           { return 'CKEditor'; }
 	function getAuthor()         { return 'yamamoto, osamuh'; }
 	function getURL()            { return 'http://nucleuscms.github.io/NP_CKEditor'; }
-	function getVersion()        { return '4.0'; }
+	function getVersion()        { return '4.5.6.1'; }
 	function supportsFeature($w) { return ($w == 'SqlTablePrefix') ? 1 : 0; }
 	function getDescription()    { return 'CKEditor for Nucleus CMS'; }
 	function getEventList()      { return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead'); }
@@ -31,14 +31,14 @@ class NP_CKEditor extends NucleusPlugin {
 			return;
 		}
 		$this->_suspendConvertBreaks();
-		$ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getOption('CKEditor_version');
+		$ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getVersion();
 		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . "\n";
 	}
 
 	function event_BookmarkletExtraHead(&$data)
 	{
 		$this->_suspendConvertBreaks();
-		$ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getOption('CKEditor_version');
+		$ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getVersion();
 		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . "\n";
 	}
 
