@@ -18,6 +18,7 @@ class NP_CKEditor extends NucleusPlugin {
         $this->_suspendConvertBreaks();
         $vs = array($this->getAdminURL().'ckeditor', $this->getVersion());
         $data['extrahead'].= vsprintf('<script language="javascript" type="text/javascript" src="%s/ckeditor.js?v=%s"></script>',$vs) . "\n";
+        $data['extrahead'].= '<style>.cke_dialog a:link, .cke_dialog a:visited {text-decoration:none;}</style>';
     }
 
     function event_BookmarkletExtraHead(&$data)
@@ -25,6 +26,7 @@ class NP_CKEditor extends NucleusPlugin {
         $this->_suspendConvertBreaks();
         $vs = array($this->getAdminURL().'ckeditor', $this->getVersion());
         $data['extrahead'].= vsprintf('<script language="javascript" type="text/javascript" src="%s/ckeditor.js?v=%s"></script>',$vs) . "\n";
+        $data['extrahead'].= '<style>.cke_dialog a:link, .cke_dialog a:visited {text-decoration:none;}</style>';
     }
 
     function event_PreSendContentType($data)
