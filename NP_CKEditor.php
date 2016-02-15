@@ -1,5 +1,4 @@
 <?php
-if(!defined('BR')) define('BR', "\n");
 class NP_CKEditor extends NucleusPlugin {
 	
 	var $isActive = false;
@@ -34,14 +33,14 @@ class NP_CKEditor extends NucleusPlugin {
 		}
 		$this->_suspendConvertBreaks();
 		$ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getOption('CKEditor_version');
-		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . BR;
+		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . "\n";
 	}
 
 	function event_BookmarkletExtraHead(&$data)
 	{
 		$this->_suspendConvertBreaks();
 		$ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getOption('CKEditor_version');
-		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . BR;
+		$data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . "\n";
 	}
 
 	function event_PreSendContentType($data)
