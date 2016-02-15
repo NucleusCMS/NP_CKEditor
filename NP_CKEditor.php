@@ -11,22 +11,6 @@ class NP_CKEditor extends NucleusPlugin {
     function getDescription()    { return 'CKEditor for Nucleus CMS'; }
     function getEventList()      { return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead'); }
 
-    function install()
-    {
-        // disable the default javascript edit bar that comes with nucleus
-        sql_query(sprintf("UPDATE %s SET value='1' WHERE name='DisableJSTools'", sql_table('config')));
-    }
-
-    function unInstall()
-    {
-        // restore to standard settings
-        sql_query(sprintf("UPDATE %s SET value='2' WHERE name='DisableJSTools'", sql_table('config')));
-    }
-
-    function isEditAction($action) {
-        return ($action==='createitem' || $action==='itemedit');
-    }
-    
     function event_AdminPrePageHead(&$data)
     {
         if(!$this->isEditAction($data['action'])) return;
@@ -39,8 +23,8 @@ class NP_CKEditor extends NucleusPlugin {
     function event_BookmarkletExtraHead(&$data)
     {
         $this->_suspendConvertBreaks();
-        $ckeditor_path = $this->getAdminURL() . 'ckeditor/ckeditor.js?v=' . $this->getVersion();
-        $data['extrahead'].= '<script language="javascript" type="text/javascript" src="' . $ckeditor_path . '"></script>' . "\n";
+        $vs = array($this->getAdminURL().'ckeditor', $this->getVersion());
+        $data['extrahead'].= vsprintf('<script language="javascript" type="text/javascript" src="%s/ckeditor.js?v=%s"></script>',$vs) . "\n";
     }
 
     function event_PreSendContentType($data)
@@ -81,11 +65,27 @@ class NP_CKEditor extends NucleusPlugin {
         $b->writeSettings();
     }
 
+    function isEditAction($action) {
+        return ($action==='createitem' || $action==='itemedit');
+    }
+    
     function parseText($tpl='string',$ph=array()) {
         foreach($ph as $k=>$v) {
             $k = "<%{$k}%>";
             $tpl = str_replace($k, $v, $tpl);
         }
         return $tpl;
+    }
+    
+    function install()
+    {
+        // disable the default javascript edit bar that comes with nucleus
+        sql_query(sprintf("UPDATE %s SET value='1' WHERE name='DisableJSTools'", sql_table('config')));
+    }
+
+    function unInstall()
+    {
+        // restore to standard settings
+        sql_query(sprintf("UPDATE %s SET value='2' WHERE name='DisableJSTools'", sql_table('config')));
     }
 }
