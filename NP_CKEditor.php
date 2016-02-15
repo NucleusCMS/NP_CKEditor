@@ -25,9 +25,8 @@ class NP_CKEditor extends NucleusPlugin {
 
 	function event_AdminPrePageHead(&$data)
 	{
-		global $action;
 		$action = $data['action'];
-		if (($action != 'createitem') && ($action != 'itemedit'))
+		if ($action != 'createitem' && $action != 'itemedit')
 		{
 			return;
 		}
@@ -56,19 +55,17 @@ class NP_CKEditor extends NucleusPlugin {
 	{
 		global $DIR_MEDIA, $CONF;
 		
-		if ($this->isActive)
-		{
-			$action = $data['action'];
-			$str = ob_get_contents();
-			ob_end_clean();
-			$adminurl = $this->getAdminURL();
-			$tpl = file_get_contents($adminurl.'inlinejs.tpl');
-			$ph['adminurl'] = $adminurl;
-			$ph['lang']     = getLanguageName()==='japanese-utf8' ? 'ja':'en';
-			$ph['MediaURL'] = $CONF['MediaURL'];
-			$str .= $this->parseText($tpl,$ph);
-			echo $str;
-		}
+		if (!$this->isActive) return;
+		
+		$str = ob_get_contents();
+		ob_end_clean();
+		$adminurl = $this->getAdminURL();
+		$tpl = file_get_contents($adminurl.'inlinejs.tpl');
+		$ph['adminurl'] = $adminurl;
+		$ph['lang']     = getLanguageName()==='japanese-utf8' ? 'ja':'en';
+		$ph['MediaURL'] = $CONF['MediaURL'];
+		$str .= $this->parseText($tpl,$ph);
+		echo $str;
 	}
 
 	function _suspendConvertBreaks()
