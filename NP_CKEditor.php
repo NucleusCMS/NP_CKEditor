@@ -23,13 +23,14 @@ class NP_CKEditor extends NucleusPlugin {
         sql_query(sprintf("UPDATE %s SET value='2' WHERE name='DisableJSTools'", sql_table('config')));
     }
 
+    function isEditAction($action) {
+        return ($action==='createitem' || $action==='itemedit');
+    }
+    
     function event_AdminPrePageHead(&$data)
     {
-        $action = $data['action'];
-        if ($action != 'createitem' && $action != 'itemedit')
-        {
-            return;
-        }
+        if(!$this->isEditAction($data['action'])) return;
+        
         $this->_suspendConvertBreaks();
         $vs = array($this->getAdminURL().'ckeditor', $this->getVersion());
         $data['extrahead'].= vsprintf('<script language="javascript" type="text/javascript" src="%s/ckeditor.js?v=%s"></script>',$vs) . "\n";
@@ -44,22 +45,17 @@ class NP_CKEditor extends NucleusPlugin {
 
     function event_PreSendContentType($data)
     {
-        if (substr($data['pageType'], 0, 6) == 'admin-')
-        {
-            ob_implicit_flush(false);
-            $this->isActive = ob_start();
-        }
+        if (substr($data['pageType'], 0, 6) !== 'admin-') return;
+        
+        ob_implicit_flush(false);
+        $this->isActive = ob_start();
     }
 
     function event_AdminPrePageFoot($data)
     {
         global $DIR_MEDIA, $CONF;
         
-        $action = $data['action'];
-        if ($action != 'createitem' && $action != 'itemedit')
-        {
-            return;
-        }
+        if(!$this->isEditAction($data['action'])) return;
         
         if (!$this->isActive) return;
         
@@ -77,12 +73,12 @@ class NP_CKEditor extends NucleusPlugin {
     function _suspendConvertBreaks()
     {
         global $manager, $blogid;
+        
         $b = & $manager->getBlog($blogid);
-        if ($b->getSetting('bconvertbreaks'))
-        {
-            $b->setConvertBreaks(false);
-            $b->writeSettings();
-        }
+        if (!$b->getSetting('bconvertbreaks')) return;
+        
+        $b->setConvertBreaks(false);
+        $b->writeSettings();
     }
 
     function parseText($tpl='string',$ph=array()) {
