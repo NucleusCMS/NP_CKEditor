@@ -5,6 +5,7 @@ CKEDITOR.config.language = '<%lang%>';
 CKEDITOR.config.filebrowserBrowseUrl ='<%adminurl%>media.php';
 CKEDITOR.config.filebrowserUploadUrl ='<%adminurl%>upload.php';
 CKEDITOR.config.uploadUrl ='<%adminurl%>upload.php?responseType=json';
+CKEDITOR.config.fontSize_sizes += ';xx-small;x-small;small;medium;large;x-large;xx-large;';
 
 function cke_ready(){
   var ed1, ed2;
