@@ -5,8 +5,47 @@ CKEDITOR.config.language = '<%lang%>';
 CKEDITOR.config.filebrowserBrowseUrl ='<%adminurl%>media.php';
 CKEDITOR.config.filebrowserUploadUrl ='<%adminurl%>upload.php';
 CKEDITOR.config.uploadUrl ='<%adminurl%>upload.php?responseType=json';
-CKEDITOR.replace('body', {skin: 'flat,<%adminurl%>ckeditor/skins/flat/'});
-CKEDITOR.replace('more', {skin: 'flat,<%adminurl%>ckeditor/skins/flat/'});
+
+function cke_ready(){
+  var ed1, ed2;
+  try {
+    ed1 = CKEDITOR.replace('inputbody', {skin: 'flat,<%adminurl%>ckeditor/skins/flat/'});
+    ed2 = CKEDITOR.replace('inputmore', {skin: 'flat,<%adminurl%>ckeditor/skins/flat/'});
+  }
+  catch (e) { }
+  if (!ed1 || !ed2) {
+    return ;
+  }
+  // hide preview button
+  var elm = document.getElementById("switchbuttons");
+  if (!elm) { return; }
+  var i = elm.childNodes.length;
+  while ( i > 0 ) {
+    i--;
+    var obj = elm.childNodes[i];
+    if (typeof obj.onclick == 'function') {
+        if (obj.onclick.toString().match( /updAllPreviews\s*\(\s*/ )) {
+            obj.style.display = "none";
+        }
+    }
+  }
+}
+
+if (typeof window.addEventListener == 'function') {
+  window.addEventListener("load", cke_ready, false);
+} else if (typeof window.attachEvent == 'function') {
+  window.attachEvent("onload", cke_ready);
+} else {
+  var cke_old_onload = window.onload;
+  function cke_new_onload()
+  {
+      if (cke_old_onload) {
+        cke_old_onload();
+      }
+      cke_ready();
+  }
+  window.onload = cke_new_onload;
+}
 
 function getQuery()
 {
