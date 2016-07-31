@@ -18,6 +18,10 @@ function cke_ready(){
     return ;
   }
   // hide preview button
+  var obj_jp = document.getElementById("showPreview");
+  if (obj_jp) {
+      obj_jp.style.display = "none";
+  }
   var elm = document.getElementById("switchbuttons");
   if (!elm) { return; }
   var i = elm.childNodes.length;
