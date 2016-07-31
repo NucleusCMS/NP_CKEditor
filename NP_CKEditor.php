@@ -7,7 +7,7 @@ class NP_CKEditor extends NucleusPlugin {
     function getAuthor()         { return 'yamamoto, osamuh'; }
     function getURL()            { return 'http://nucleuscms.github.io/NP_CKEditor'; }
     function getVersion()        { return '4.5.6.1'; }
-    function supportsFeature($w) { return ($w == 'SqlTablePrefix') ? 1 : 0; }
+    function supportsFeature($feature) { return in_array($feature , array('SqlTablePrefix', 'NotUseDbApi')); }
     function getDescription()    { return 'CKEditor for Nucleus CMS'; }
     function getEventList()      { return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead'); }
 
@@ -27,6 +27,7 @@ class NP_CKEditor extends NucleusPlugin {
         $vs = array($this->getAdminURL().'ckeditor', $this->getVersion());
         $data['extrahead'].= vsprintf('<script language="javascript" type="text/javascript" src="%s/ckeditor.js?v=%s"></script>',$vs) . "\n";
         $data['extrahead'].= '<style>.cke_dialog a:link, .cke_dialog a:visited {text-decoration:none;}</style>';
+        $data['extrahead'].= $this->getInlinejs();
     }
 
     function event_PreSendContentType($data)
@@ -39,23 +40,31 @@ class NP_CKEditor extends NucleusPlugin {
 
     function event_AdminPrePageFoot($data)
     {
-        global $DIR_MEDIA, $CONF;
-        
         if(!$this->isEditAction($data['action'])) return;
         
         if (!$this->isActive) return;
         
         $str = ob_get_contents();
         ob_end_clean();
+        echo $str . $this->getInlinejs();
+    }
+
+    private function getInlinejs()
+    {
+        static $called = FALSE;
+        if ($called)
+            return; // Use only once
+        $called = TRUE;
+        global $DIR_MEDIA, $CONF;
         $adminurl = $this->getAdminURL();
         $tpl = file_get_contents($this->getDirectory().'inlinejs.tpl');
         if ($tpl !== FALSE) {
             $ph['adminurl'] = $adminurl;
             $ph['lang']     = getLanguageName()==='japanese-utf8' ? 'ja':'en';
             $ph['MediaURL'] = $CONF['MediaURL'];
-            $str .= $this->parseText($tpl,$ph);
+            return $this->parseText($tpl,$ph);
         }
-        echo $str;
+        return '';
     }
 
     function _suspendConvertBreaks()
