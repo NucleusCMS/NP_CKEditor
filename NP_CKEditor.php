@@ -6,8 +6,8 @@ class NP_CKEditor extends NucleusPlugin {
     function getName()           { return 'CKEditor'; }
     function getAuthor()         { return 'yamamoto, osamuh'; }
     function getURL()            { return 'http://nucleuscms.github.io/NP_CKEditor'; }
-    function getVersion()        { return '4.5.6.1'; }
-    function supportsFeature($feature) { return in_array($feature , array('SqlTablePrefix', 'NotUseDbApi')); }
+    function getVersion()        { return '4.5.6.2'; }
+    function supportsFeature($feature) { return in_array($feature , array('SqlTablePrefix', 'SqlApi', 'SqlApi_SQL92')); }
     function getDescription()    { return 'CKEditor for Nucleus CMS'; }
     function getEventList()      { return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead'); }
 

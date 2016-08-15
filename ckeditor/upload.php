@@ -27,9 +27,9 @@ if (!$member->isLoggedIn()) {
 }
 
 // check if member is on at least one teamlist
-$query = 'SELECT * FROM ' . sql_table('team'). ' WHERE tmember=' . $member->getID();
-$teams = sql_query($query);
-if (sql_num_rows($teams) == 0 && !$member->isAdmin())
+$query = 'SELECT count(*) as result FROM ' . sql_table('team'). ' WHERE tmember=' . $member->getID();
+$teams = intval(quickQuery($query));
+if ($teams == 0 && !$member->isAdmin())
 	upload_doError(_ERROR_DISALLOWEDUPLOAD);
 
 // get parameters
