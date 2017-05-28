@@ -1,3 +1,7 @@
+<style>
+    a.cke_dialog_ui_button_ok {color:#fff !important;}
+    .cke_reset_all, .cke_reset_all *, .cke_reset_all a, .cke_reset_all textarea {font-family:inherit !important;}
+</style>
 <script type="text/javascript">
 //<![CDATA[
 CKEDITOR.config.customConfig ='<%adminurl%>ckeditor/config.js';
