@@ -10,8 +10,8 @@ CKEDITOR.config.fontSize_sizes += ';xx-small;x-small;small;medium;large;x-large;
 function cke_ready(){
   var ed1, ed2;
   try {
-    ed1 = CKEDITOR.replace('inputbody', {skin: 'flat,<%adminurl%>ckeditor/skins/flat/'});
-    ed2 = CKEDITOR.replace('inputmore', {skin: 'flat,<%adminurl%>ckeditor/skins/flat/'});
+    ed1 = CKEDITOR.replace('inputbody');
+    ed2 = CKEDITOR.replace('inputmore');
   }
   catch (e) { }
   if (!ed1 || !ed2) {
