@@ -6,10 +6,13 @@ class NP_CKEditor extends NucleusPlugin {
     function getName()           { return 'CKEditor'; }
     function getAuthor()         { return 'yamamoto, osamuh'; }
     function getURL()            { return 'http://nucleuscms.github.io/NP_CKEditor'; }
-    function getVersion()        { return '4.6.2'; }
+    function getVersion()        { return '4.6.2.1'; }
     function supportsFeature($feature) { return in_array($feature , array('SqlTablePrefix', 'SqlApi', 'SqlApi_SQL92')); }
     function getDescription()    { return 'CKEditor for Nucleus CMS'; }
-    function getEventList()      { return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead'); }
+    function getEventList()      {
+        $this->createItemOption('cke_item_enable', 'CKEditor有効', 'yesno', 'yes');
+        return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead');
+    }
 
     function event_AdminPrePageHead(&$data)
     {
@@ -79,6 +82,10 @@ class NP_CKEditor extends NucleusPlugin {
     }
 
     function isEditAction($action) {
+        global $itemid;
+        
+        if($this->getItemOption($itemid,'cke_item_enable')==='no') return false;
+        
         return ($action==='createitem' || $action==='itemedit');
     }
     
