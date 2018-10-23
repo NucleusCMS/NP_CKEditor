@@ -2,6 +2,7 @@
 class NP_CKEditor extends NucleusPlugin {
     
     public $isActive = false;
+    public $isEnabled  = true;
     
     function getName()           { return 'CKEditor'; }
     function getAuthor()         { return 'yamamoto, osamuh'; }
@@ -11,12 +12,13 @@ class NP_CKEditor extends NucleusPlugin {
     function getDescription()    { return 'CKEditor for Nucleus CMS'; }
     function getEventList()      {
         $this->createItemOption('cke_item_enable', 'CKEditor有効', 'yesno', 'yes');
-        return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead');
+        return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead', 'PrepareItemForEdit');
     }
 
     function event_AdminPrePageHead(&$data)
     {
         if(!$this->isEditAction($data['action'])) return;
+        if(!$this->isEnabled)                     return;
         
         $this->_suspendConvertBreaks();
         $vs = array($this->getAdminURL().'ckeditor', $this->getVersion());
@@ -26,6 +28,8 @@ class NP_CKEditor extends NucleusPlugin {
 
     function event_BookmarkletExtraHead(&$data)
     {
+        if(!$this->isEnabled) return;
+        
         $this->_suspendConvertBreaks();
         $vs = array($this->getAdminURL().'ckeditor', $this->getVersion());
         $data['extrahead'].= vsprintf('<script language="javascript" type="text/javascript" src="%s/ckeditor.js?v=%s"></script>',$vs) . "\n";
@@ -52,6 +56,23 @@ class NP_CKEditor extends NucleusPlugin {
         echo $str . $this->getInlinejs();
     }
 
+    function event_PrepareItemForEdit(&$data)
+    {
+        global $CONF;
+        
+        $content = $data['item']['body'].' '.$data['item']['more'];
+        if(    strpos($content, '<%') !== false
+            || strpos($content, '<!%') !== false
+            || strpos($content, '<form') !== false
+            || strpos($content, '</pre>') !== false
+            ) {
+            $this->isEnabled = false;
+            $CONF['DisableJsTools'] = 0;
+        } else {
+            $this->isEnabled = true;
+        }
+    }
+    
     private function getInlinejs()
     {
         static $called = FALSE;
