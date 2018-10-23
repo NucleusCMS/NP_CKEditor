@@ -1,7 +1,7 @@
 <?php
 class NP_CKEditor extends NucleusPlugin {
     
-    var $isActive = false;
+    public $isActive = false;
     
     function getName()           { return 'CKEditor'; }
     function getAuthor()         { return 'yamamoto, osamuh'; }
