@@ -61,10 +61,15 @@ class NP_CKEditor extends NucleusPlugin {
         global $CONF;
         
         $content = $data['item']['body'].' '.$data['item']['more'];
-        if(    strpos($content, '<%') !== false
+        if(getVar('editor') === 'rte') {
+            $this->isEnabled = true;
+        }
+        elseif(    strpos($content, '<%') !== false
             || strpos($content, '<!%') !== false
             || strpos($content, '<form') !== false
             || strpos($content, '</pre>') !== false
+            || strpos($content, '</script>') !== false
+            || getVar('editor') === 'plain'
             ) {
             $this->isEnabled = false;
             $CONF['DisableJsTools'] = 0;
