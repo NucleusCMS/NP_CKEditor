@@ -1,8 +1,8 @@
 <?php
 class NP_CKEditor extends NucleusPlugin {
     
-    public $isActive = false;
-    public $isEnabled  = true;
+    public $isActive  = false;
+    public $isEnabled = true;
     
     function getName()           { return 'CKEditor'; }
     function getAuthor()         { return 'yamamoto, osamuh'; }
@@ -15,7 +15,7 @@ class NP_CKEditor extends NucleusPlugin {
         return array('PreSendContentType', 'AdminPrePageFoot', 'AdminPrePageHead', 'BookmarkletExtraHead', 'PrepareItemForEdit');
     }
 
-    function event_AdminPrePageHead(&$data)
+    public function event_AdminPrePageHead(&$data)
     {
         if(!$this->isEditAction($data['action'])) return;
         if(!$this->isEnabled)                     return;
@@ -26,7 +26,7 @@ class NP_CKEditor extends NucleusPlugin {
         $data['extrahead'].= '<style>.cke_dialog a:link, .cke_dialog a:visited {text-decoration:none;}</style>';
     }
 
-    function event_BookmarkletExtraHead(&$data)
+    public function event_BookmarkletExtraHead(&$data)
     {
         if(!$this->isEnabled) return;
         
@@ -37,7 +37,7 @@ class NP_CKEditor extends NucleusPlugin {
         $data['extrahead'].= $this->getInlinejs();
     }
 
-    function event_PreSendContentType($data)
+    public function event_PreSendContentType($data)
     {
         if (substr($data['pageType'], 0, 6) !== 'admin-') return;
         
@@ -45,7 +45,7 @@ class NP_CKEditor extends NucleusPlugin {
         $this->isActive = ob_start();
     }
 
-    function event_AdminPrePageFoot($data)
+    public function event_AdminPrePageFoot($data)
     {
         if(!$this->isEditAction($data['action'])) return;
         
@@ -56,7 +56,7 @@ class NP_CKEditor extends NucleusPlugin {
         echo $str . $this->getInlinejs();
     }
 
-    function event_PrepareItemForEdit(&$data)
+    public function event_PrepareItemForEdit(&$data)
     {
         global $CONF;
         
@@ -91,7 +91,7 @@ class NP_CKEditor extends NucleusPlugin {
         return '';
     }
 
-    function _suspendConvertBreaks()
+    private function _suspendConvertBreaks()
     {
         global $manager, $blogid;
         
@@ -102,7 +102,7 @@ class NP_CKEditor extends NucleusPlugin {
         $b->writeSettings();
     }
 
-    function isEditAction($action) {
+    private function isEditAction($action) {
         global $itemid;
         
         if($this->getItemOption($itemid,'cke_item_enable')==='no') return false;
@@ -110,7 +110,7 @@ class NP_CKEditor extends NucleusPlugin {
         return ($action==='createitem' || $action==='itemedit');
     }
     
-    function parseText($tpl='string',$ph=array()) {
+    private function parseText($tpl='string',$ph=array()) {
         foreach($ph as $k=>$v) {
             $k = "<%{$k}%>";
             $tpl = str_replace($k, $v, $tpl);
@@ -118,13 +118,13 @@ class NP_CKEditor extends NucleusPlugin {
         return $tpl;
     }
     
-    function install()
+    public function install()
     {
         // disable the default javascript edit bar that comes with nucleus
         sql_query(sprintf("UPDATE %s SET value='1' WHERE name='DisableJSTools'", sql_table('config')));
     }
 
-    function unInstall()
+    public function unInstall()
     {
         // restore to standard settings
         sql_query(sprintf("UPDATE %s SET value='2' WHERE name='DisableJSTools'", sql_table('config')));
